@@ -1,0 +1,13 @@
+{
+    "name":"John doe",
+    "fullname":"john doe",
+    "email":"johndoe123@okk.com",
+    "ccnumber":"1234123412341234",
+    "address":"504 A building",
+    "expirymonth":"September",
+    "city":"pune",
+    "expiryyear":"2027",
+    "cvv":"134",
+    "state":"Maha",
+    "zip":"411232"
+}

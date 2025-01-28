@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { CheckoutPage } from '../../pages/checkout'
+const testdata=JSON.parse(JSON.stringify(require("../../data/checkouttestdata.json")))
 
 test('continue checkout test', async ({ page }) => {
 
@@ -8,9 +9,8 @@ test('continue checkout test', async ({ page }) => {
 
 
     await Checkout.gotoCheckoutPage()
-    await Checkout.continueCheckout('john doe', 'john doe', 'johndoe123@okk.com', '1234123412341234', '504 A building', 'September', 'pune', '2027', '134', 'Maha', '411232')
-
-    await expect(page.getByText('Order Confirmed!')).toBeVisible();
+    await Checkout.continueCheckout(testdata.name, testdata.fullname, testdata.email, testdata.ccnumber, testdata.address, testdata.expirymonth, testdata.city, testdata.expiryyear, testdata.cvv, testdata.state, testdata.zip)
+    await expect(page.getByText('Order Confirmed!')).toBeVisible(); // Asserting order confirmation
     await expect(page.getByText('Order Number:')).toBeVisible();
 
 }
@@ -23,12 +23,11 @@ test('alert message test', async ({ page }) => {
     let dialogHandled = false;
     page.once('dialog', async dialog => {
         expect(dialog.type()).toContain('alert')
-        expect(dialog.message()).toContain('Shipping address same as billing checkbox must be selected.')
+        expect(dialog.message()).toContain('Shipping address same as billing checkbox must be selected.') 
         await dialog.accept();
         dialogHandled = true;
     })
-
-    await Checkout.getAlertMessage('john doe', 'john doe', 'johndoe123@okk.com', '1234123412341234', '504 A building', 'September', 'pune', '2027', '134', 'Maha', '411232')
+    await Checkout.getAlertMessage(testdata.name, testdata.fullname, testdata.email, testdata.ccnumber, testdata.address, testdata.expirymonth, testdata.city, testdata.expiryyear, testdata.cvv, testdata.state, testdata.zip)
 
     await page.waitForTimeout(2000);
     expect(dialogHandled).toBe(true);

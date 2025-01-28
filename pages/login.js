@@ -7,7 +7,11 @@ exports.LoginPage = class LoginPage {
         this.username_textbox = page.getByLabel('USERNAME');
         this.password_textbox = page.getByLabel('PASSWORD');
         this.login_button = page.getByRole('button', { name: 'Sign In' });
+        this.welcome_message_text = page.getByRole('heading', { name: 'Welcome!' });
     }
+
+
+    
 
     async gotoLoginPage(){
         await this.page.goto('http://localhost:3100/login');
