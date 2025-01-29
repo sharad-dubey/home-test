@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pages/login'
 const testdata=JSON.parse(JSON.stringify(require("../../data/logintestdata.json")))
+const testurl=JSON.parse(JSON.stringify(require("../../data/urldata.json")))
 
 test.beforeEach(async ({ page }) => {
-    await page.goto(testdata.loginurl);
+    await page.goto(`${testurl.baseurl}/login`);
   });
 
 test('Successful Login with credential', async ({ page }) => {

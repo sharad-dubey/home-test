@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { SearchPage } from '../../pages/search'
 const testdata=JSON.parse(JSON.stringify(require("../../data/searchtestdata.json")))
+const testurl=JSON.parse(JSON.stringify(require("../../data/urldata.json")))
 
 test.beforeEach(async ({ page }) => {
-    await page.goto(testdata.searchurl);
+    await page.goto(`${testurl.baseurl}/search`);
   });
 
 test('verify search result message', async ({ page }) => {

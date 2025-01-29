@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { CheckoutPage } from '../../pages/checkout'
 const testdata=JSON.parse(JSON.stringify(require("../../data/checkouttestdata.json")))
+const testurl=JSON.parse(JSON.stringify(require("../../data/urldata.json")))
 
 test.beforeEach(async ({ page }) => {
-    await page.goto(testdata.checkouturl);
+    await page.goto(`${testurl.baseurl}/checkout`);
   });
 
 test('continue checkout test', async ({ page }) => {

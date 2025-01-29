@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { GridPage } from '../../pages/grid'
 const testdata=JSON.parse(JSON.stringify(require("../../data/gridtestdata.json")))
+const testurl=JSON.parse(JSON.stringify(require("../../data/urldata.json")))
 
 test.beforeEach(async ({ page }) => {
-    await page.goto(testdata.gridurl);
+    await page.goto(`${testurl.baseurl}/grid`);
   });
 
 test('verify position seven product', async ({ page }) => {
