@@ -70,7 +70,6 @@ If the allure command is not recognized, ensure the bin folder is added to your 
 ### Project Structure
 
 ├── allure-results/        # Allure test results (generated)
-└── allure-report/         # Allure reports (generated)
 ├── data/                  # JSON test data files
 │   ├── users.json         # Example test data
 ├── pages/                 # Page Object Model files
@@ -94,9 +93,9 @@ If the allure command is not recognized, ensure the bin folder is added to your 
 ## Generating Allure Reports
 Run the tests with the Allure reporter: npx playwright test --reporter=allure-playwright
 
-Generate the Allure report: allure generate ./allure-results -o ./allure-report --clean
+Generate the Allure report: allure generate ./allure-results -o ./allure-results/allure-report --clean
 
-Open the Allure report: allure open ./allure-report
+Open the Allure report: allure open ./allure-results/allure-report
 
 ## Configuration
 All configurations are defined in playwright.config.js
