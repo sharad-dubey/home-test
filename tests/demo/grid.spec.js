@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { GridPage } from '../../pages/grid'
+import { GridPageEvent } from '../../pageEvents/gridPageEvent'
 const testdata=JSON.parse(JSON.stringify(require("../../data/gridtestdata.json")))
 const testurl=JSON.parse(JSON.stringify(require("../../data/urldata.json")))
 

@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { CheckoutPage } from '../../pages/checkout'
+import { CheckoutPageEvent } from '../../pageEvents/checkoutPageEvent'
 const testdata=JSON.parse(JSON.stringify(require("../../data/checkouttestdata.json")))
 const testurl=JSON.parse(JSON.stringify(require("../../data/urldata.json")))
 
@@ -10,7 +11,8 @@ test.beforeEach(async ({ page }) => {
 test('continue checkout test', async ({ page }) => {
 
     const Checkout = new CheckoutPage(page)
-    await Checkout.continueCheckout(testdata.name, testdata.fullname, testdata.email, testdata.ccnumber, testdata.address, testdata.expirymonth, testdata.city, testdata.expiryyear, testdata.cvv, testdata.state, testdata.zip)
+    const CheckoutEvent = new CheckoutPageEvent(page)
+    await CheckoutEvent.continueCheckout(testdata.name, testdata.fullname, testdata.email, testdata.ccnumber, testdata.address, testdata.expirymonth, testdata.city, testdata.expiryyear, testdata.cvv, testdata.state, testdata.zip)
     const actualmessage = await Checkout.orderconfirmmessage.textContent();
     expect(actualmessage).toBe(testdata.expectedordermessage); // Asserting order confirmation
     const orderNumberText = await Checkout.ordernumber.textContent();
@@ -24,6 +26,7 @@ test('continue checkout test', async ({ page }) => {
 test('alert message test', async ({ page }) => {
 
     const Checkout = new CheckoutPage(page)
+    const CheckoutEvent = new CheckoutPageEvent(page)
     let dialogHandled = false;
     page.once('dialog', async dialog => {
         expect(dialog.type()).toContain('alert')
@@ -31,8 +34,8 @@ test('alert message test', async ({ page }) => {
         await dialog.accept();
         dialogHandled = true;
     })
-    await Checkout.getAlertMessage(testdata.name, testdata.fullname, testdata.email, testdata.ccnumber, testdata.address, testdata.expirymonth, testdata.city, testdata.expiryyear, testdata.cvv, testdata.state, testdata.zip)
-
+    await CheckoutEvent.getAlertMessage(testdata.name, testdata.fullname, testdata.email, testdata.ccnumber, testdata.address, testdata.expirymonth, testdata.city, testdata.expiryyear, testdata.cvv, testdata.state, testdata.zip)
+    
     await page.waitForTimeout(2000);
     expect(dialogHandled).toBe(true);
     expect(page.listeners('dialog')).toHaveLength(0); // Assert no active dialog listeners

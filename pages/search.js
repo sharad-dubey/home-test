@@ -8,9 +8,5 @@ exports.SearchPage = class SearchPage {
         this.search_result = page.getByText('Found one result for');
     }
 
-    async gotoSearchPage(){
-        await this.page.goto('http://localhost:3100/search');
-    }
-
-
+   
 }

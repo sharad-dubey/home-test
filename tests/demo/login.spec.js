@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pages/login'
+import { LoginPageEvent } from '../../pageEvents/loginPageEvent'
 const testdata=JSON.parse(JSON.stringify(require("../../data/logintestdata.json")))
 const testurl=JSON.parse(JSON.stringify(require("../../data/urldata.json")))
 
@@ -10,8 +11,9 @@ test.beforeEach(async ({ page }) => {
 test('Successful Login with credential', async ({ page }) => {
 
   const Login = new LoginPage(page)
+  const LoginEvent = new LoginPageEvent(page)
 
-  await Login.login(testdata.username, testdata.password) // With correct credentials
+  await LoginEvent.login(testdata.username, testdata.password)
   await expect(Login.welcome_message_text).toBeVisible();
   await expect(Login.welcome_message_username).toContainText(testdata.username);
 
@@ -21,9 +23,9 @@ test('Successful Login with credential', async ({ page }) => {
 test('Wrong username OR password', async ({ page }) => {
 
   const Login = new LoginPage(page)
+  const LoginEvent = new LoginPageEvent(page)
 
-  await Login.login(testdata.wrongusername, testdata.wrongpassword) // With incorrect credentials
-
+  await LoginEvent.login(testdata.wrongusername, testdata.wrongpassword) // With incorrect credentials
   await expect(page.locator('#message')).toContainText('Wrong credentials');
 
 
@@ -32,8 +34,9 @@ test('Wrong username OR password', async ({ page }) => {
 test('Empty username and password', async ({ page }) => {
 
   const Login = new LoginPage(page)
+  const LoginEvent = new LoginPageEvent(page)
 
-  await Login.login(testdata.emptyusername, testdata.emptypassword) // With empty credentials
+  await LoginEvent.login(testdata.emptyusername, testdata.emptypassword) // With empty credentials
 
   await expect(page.locator('#message')).toContainText('Fields can not be empty');
 

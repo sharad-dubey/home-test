@@ -10,17 +10,6 @@ exports.LoginPage = class LoginPage {
         this.welcome_message_text = page.locator('#welcome-message h2');
         this.welcome_message_username = page.locator('#welcome-message p');
     }
-   
-
-    async gotoLoginPage(loginurl){
-        await this.page.goto('http://localhost:3100/login');
-    }
-
-    async login(username, password){
-        await this.username_textbox.fill(username)
-        await this.password_textbox.fill(password)
-        await this.login_button.click()
-
-    }
+    
    
 }

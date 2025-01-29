@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { SearchPage } from '../../pages/search'
+import { SearchPageEvent } from '../../pageEvents/SearchPageEvent'
 const testdata=JSON.parse(JSON.stringify(require("../../data/searchtestdata.json")))
 const testurl=JSON.parse(JSON.stringify(require("../../data/urldata.json")))
 
@@ -16,9 +17,6 @@ test('verify search result message', async ({ page }) => {
     await Search.search_button.click();
 
     const searchResultMessage = await Search.search_result.textContent();
-    // await expect(searchResultMessage).toBeVisible();
-
-    // const expectedResultMessage = `Found one result for ${searchWord}`;
     const partmessage = testdata.resultmessage;
     const expectedResultMessage = partmessage + searchWord;
     await expect(searchResultMessage).toBe(expectedResultMessage);  
