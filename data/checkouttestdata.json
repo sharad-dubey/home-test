@@ -1,4 +1,5 @@
 {
+    "checkouturl":"http://localhost:3100/checkout",
     "name":"John doe",
     "fullname":"john doe",
     "email":"johndoe123@okk.com",
@@ -9,5 +10,7 @@
     "expiryyear":"2027",
     "cvv":"134",
     "state":"Maha",
-    "zip":"411232"
+    "zip":"411232",
+    "alertboxmessage":"Shipping address same as billing checkbox must be selected.",
+    "expectedordermessage":"Order Confirmed!"
 }

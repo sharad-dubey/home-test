@@ -17,6 +17,8 @@ exports.CheckoutPage = class CheckoutPage {
         this.checkbox_label = page.getByLabel('Shipping address same as')
         this.checkout_button = page.getByRole('button', { name: 'Continue to checkout' })
         this.cart_price_list = page.locator('div p span.price')
+        this.orderconfirmmessage = page.locator('#order-confirmation h1')
+        this.ordernumber = page.locator('#order-confirmation p')
     }
 
     async gotoCheckoutPage(){

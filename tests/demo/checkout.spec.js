@@ -2,16 +2,20 @@ import { test, expect } from '@playwright/test';
 import { CheckoutPage } from '../../pages/checkout'
 const testdata=JSON.parse(JSON.stringify(require("../../data/checkouttestdata.json")))
 
+test.beforeEach(async ({ page }) => {
+    await page.goto(testdata.checkouturl);
+  });
+
 test('continue checkout test', async ({ page }) => {
 
-
     const Checkout = new CheckoutPage(page)
-
-
-    await Checkout.gotoCheckoutPage()
     await Checkout.continueCheckout(testdata.name, testdata.fullname, testdata.email, testdata.ccnumber, testdata.address, testdata.expirymonth, testdata.city, testdata.expiryyear, testdata.cvv, testdata.state, testdata.zip)
-    await expect(page.getByText('Order Confirmed!')).toBeVisible(); // Asserting order confirmation
-    await expect(page.getByText('Order Number:')).toBeVisible();
+    const actualmessage = await Checkout.orderconfirmmessage.textContent();
+    expect(actualmessage).toBe(testdata.expectedordermessage); // Asserting order confirmation
+    const orderNumberText = await Checkout.ordernumber.textContent();
+    const orderNumber = orderNumberText.split(':')[1].trim();
+    console.log('Order number is --', orderNumber);
+    await expect(orderNumber).not.toBe('');   // Asserting that order number is not empty
 
 }
 )
@@ -19,11 +23,10 @@ test('continue checkout test', async ({ page }) => {
 test('alert message test', async ({ page }) => {
 
     const Checkout = new CheckoutPage(page)
-    await Checkout.gotoCheckoutPage()
     let dialogHandled = false;
     page.once('dialog', async dialog => {
         expect(dialog.type()).toContain('alert')
-        expect(dialog.message()).toContain('Shipping address same as billing checkbox must be selected.') 
+        expect(dialog.message()).toContain(testdata.alertboxmessage) 
         await dialog.accept();
         dialogHandled = true;
     })
@@ -40,11 +43,7 @@ test('alert message test', async ({ page }) => {
 test('total cart value', async ({ page }) => {
 
     const Checkout = new CheckoutPage(page)
-
-    await Checkout.gotoCheckoutPage()
-
     const priceList = await Checkout.cart_price_list;
-    // const priceList = await page.locator('div p span.price')
     console.log('number of items', await priceList.count())
     const priceListCount = await priceList.count();
     let calculateTotalPrice=0;

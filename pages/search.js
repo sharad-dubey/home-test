@@ -4,7 +4,8 @@ exports.SearchPage = class SearchPage {
         this.page=page
         this.search_box = page.locator("form input[placeholder='Search..']");
         this.search_button = page.locator('form button');
-        this.search_result = page.locator('.result-container #result');
+        this.empty_search_result = page.locator('.result-container #result');
+        this.search_result = page.getByText('Found one result for');
     }
 
     async gotoSearchPage(){

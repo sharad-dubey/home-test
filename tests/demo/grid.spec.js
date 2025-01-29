@@ -1,11 +1,15 @@
 import { test, expect } from '@playwright/test';
 import { GridPage } from '../../pages/grid'
+const testdata=JSON.parse(JSON.stringify(require("../../data/gridtestdata.json")))
+
+test.beforeEach(async ({ page }) => {
+    await page.goto(testdata.gridurl);
+  });
 
 test('verify position seven product', async ({ page }) => {
 
     const Grid = new GridPage(page)
 
-    await Grid.gotoGridPage()
     console.log('number of food items', await Grid.grid_item_list.count())
 
 
@@ -15,8 +19,8 @@ test('verify position seven product', async ({ page }) => {
    const productName = await product7.locator('h4').textContent();
    const productPrice = await product7.locator('#item-price').textContent();
 
-   expect(productName).toBe('Super Pepperoni');
-   expect(productPrice).toBe('$10');
+   expect(productName).toBe(testdata.item7name);
+   expect(productPrice).toBe(testdata.item7price);
 
 }
 )
@@ -25,7 +29,6 @@ test('Assert all items non-empty details', async ({ page }) => {
 
     const Grid = new GridPage(page)
 
-    await Grid.gotoGridPage()
     console.log('number of food items', await Grid.grid_item_list.count())
 
 
