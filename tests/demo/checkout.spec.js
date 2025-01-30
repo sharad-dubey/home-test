@@ -42,7 +42,7 @@ test('Alert message test', async ({ page }) => {
     const checkoutEvent = new CheckoutPageEvent(page);
     let dialogHandled = false;
 
-    page.once('dialog', async dialog => {
+    const dialogPromise = page.waitForEvent('dialog').then(async (dialog) => {
         expect(dialog.type()).toContain('alert');
         expect(dialog.message()).toContain(testdata.alertboxmessage);
         await dialog.accept();
@@ -63,7 +63,7 @@ test('Alert message test', async ({ page }) => {
         testdata.zip
     );
 
-    await page.waitForTimeout(2000);
+    await dialogPromise;
     expect(dialogHandled).toBe(true);
     expect(page.listeners('dialog')).toHaveLength(0); // Assert no active dialog listeners
 });
