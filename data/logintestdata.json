@@ -1,9 +1,10 @@
 {
-    "loginurl":"http://localhost:3100/login",
     "username":"johndoe19",
     "password":"supersecret",
     "wrongusername":"eweweewe",
     "wrongpassword":"wewewee",
     "emptyusername":"",
-    "emptypassword":""
+    "emptypassword":"",
+    "wrongcredentialmessage":"Wrong credentials",
+    "emptyfieldmessage":"Fields can not be empty"
 }

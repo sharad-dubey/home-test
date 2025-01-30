@@ -1,73 +1,93 @@
 import { test, expect } from '@playwright/test';
-import { CheckoutPage } from '../../pages/checkout'
-import { CheckoutPageEvent } from '../../pageEvents/checkoutPageEvent'
-const testdata=JSON.parse(JSON.stringify(require("../../data/checkouttestdata.json")))
-const testurl=JSON.parse(JSON.stringify(require("../../data/urldata.json")))
+import { CheckoutPage } from '../../pages/checkout';
+import { CheckoutPageEvent } from '../../pageEvents/checkoutPageEvent';
+
+const testdata = require('../../data/checkouttestdata.json');
+const testurl = require('../../data/environmentalConfig.json');
 
 test.beforeEach(async ({ page }) => {
     await page.goto(`${testurl.baseurl}/checkout`);
-  });
+});
 
-test('continue checkout test', async ({ page }) => {
+test('Continue checkout test', async ({ page }) => {
+    const checkout = new CheckoutPage(page);
+    const checkoutEvent = new CheckoutPageEvent(page);
 
-    const Checkout = new CheckoutPage(page)
-    const CheckoutEvent = new CheckoutPageEvent(page)
-    await CheckoutEvent.continueCheckout(testdata.name, testdata.fullname, testdata.email, testdata.ccnumber, testdata.address, testdata.expirymonth, testdata.city, testdata.expiryyear, testdata.cvv, testdata.state, testdata.zip)
-    const actualmessage = await Checkout.orderconfirmmessage.textContent();
-    expect(actualmessage).toBe(testdata.expectedordermessage); // Asserting order confirmation
-    const orderNumberText = await Checkout.ordernumber.textContent();
+    await checkoutEvent.continueCheckout(
+        testdata.name,
+        testdata.fullname,
+        testdata.email,
+        testdata.ccnumber,
+        testdata.address,
+        testdata.expirymonth,
+        testdata.city,
+        testdata.expiryyear,
+        testdata.cvv,
+        testdata.state,
+        testdata.zip
+    );
+
+    const actualMessage = await checkout.orderconfirmmessage.textContent();
+    expect(actualMessage).toBe(testdata.expectedordermessage); // Assert order confirmation
+
+    const orderNumberText = await checkout.ordernumber.textContent();
     const orderNumber = orderNumberText.split(':')[1].trim();
     console.log('Order number is --', orderNumber);
-    await expect(orderNumber).not.toBe('');   // Asserting that order number is not empty
 
-}
-)
+    await expect(orderNumber).not.toBe(''); // Assert that order number is not empty
+});
 
-test('alert message test', async ({ page }) => {
-
-    const Checkout = new CheckoutPage(page)
-    const CheckoutEvent = new CheckoutPageEvent(page)
+test('Alert message test', async ({ page }) => {
+    const checkout = new CheckoutPage(page);
+    const checkoutEvent = new CheckoutPageEvent(page);
     let dialogHandled = false;
+
     page.once('dialog', async dialog => {
-        expect(dialog.type()).toContain('alert')
-        expect(dialog.message()).toContain(testdata.alertboxmessage) 
+        expect(dialog.type()).toContain('alert');
+        expect(dialog.message()).toContain(testdata.alertboxmessage);
         await dialog.accept();
         dialogHandled = true;
-    })
-    await CheckoutEvent.getAlertMessage(testdata.name, testdata.fullname, testdata.email, testdata.ccnumber, testdata.address, testdata.expirymonth, testdata.city, testdata.expiryyear, testdata.cvv, testdata.state, testdata.zip)
-    
+    });
+
+    await checkoutEvent.getAlertMessage(
+        testdata.name,
+        testdata.fullname,
+        testdata.email,
+        testdata.ccnumber,
+        testdata.address,
+        testdata.expirymonth,
+        testdata.city,
+        testdata.expiryyear,
+        testdata.cvv,
+        testdata.state,
+        testdata.zip
+    );
+
     await page.waitForTimeout(2000);
     expect(dialogHandled).toBe(true);
     expect(page.listeners('dialog')).toHaveLength(0); // Assert no active dialog listeners
+});
 
+test('Total cart value', async ({ page }) => {
+    const checkout = new CheckoutPage(page);
+    const priceList = await checkout.cart_price_list;
+    console.log('Number of items:', await priceList.count());
 
-}
-)
-
-test('total cart value', async ({ page }) => {
-
-    const Checkout = new CheckoutPage(page)
-    const priceList = await Checkout.cart_price_list;
-    console.log('number of items', await priceList.count())
     const priceListCount = await priceList.count();
-    let calculateTotalPrice=0;
+    let calculatedTotalPrice = 0;
 
-    for(let i=0; i<priceListCount-1; i++){
+    for (let i = 0; i < priceListCount - 1; i++) {
         let priceText = await priceList.nth(i).textContent();
-        priceText = priceText.trim().replace('$','');
+        priceText = priceText.trim().replace('$', '');
         let priceValue = parseFloat(priceText);
-        console.log('price value', priceText);
-        calculateTotalPrice += priceValue;
-
+        console.log('Price value:', priceText);
+        calculatedTotalPrice += priceValue;
     }
 
-    console.log('Total ', calculateTotalPrice);
+    console.log('Total:', calculatedTotalPrice);
 
-    let expectedTotalPrice = await priceList.nth(priceListCount-1).textContent();
-    const expectedTotalPriceValue = parseFloat(expectedTotalPrice.trim().replace('$',''));
+    let expectedTotalPrice = await priceList.nth(priceListCount - 1).textContent();
+    const expectedTotalPriceValue = parseFloat(expectedTotalPrice.trim().replace('$', ''));
 
-    expect(calculateTotalPrice).toBe(expectedTotalPriceValue);
- 
-
-}
-)
+    expect(calculatedTotalPrice).toBe(expectedTotalPriceValue);
+});

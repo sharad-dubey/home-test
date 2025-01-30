@@ -71,11 +71,26 @@ If the allure command is not recognized, ensure the bin folder is added to your 
 
 ├── allure-results/        # Allure test results (generated)
 ├── data/                  # JSON test data files
-│   ├── users.json         # Example test data
+│   ├── checkouttestdata.json       # Example test data  
+│   ├── environmentalConfig.json         
+│   ├── gridtestdata.json         
+│   ├── logintestdata.json         
+│   ├── searchtestdata.json         
+├── pagesEvents/                 # Page Event files
+│   ├── checkoutPageEvent.js       # Example page event 
+│   ├── gridPageEvent.js      
+│   ├── loginPageEvent.js      
+│   ├── SearchPageEvent.js      
 ├── pages/                 # Page Object Model files
-│   ├── login.js       # Example page object
+│   ├── checkout.js       # Example page object
+│   ├── grid.js       
+│   ├── login.js       
+│   ├── search.js       
 ├── tests/demo/                 # Test scripts
-│   ├── login.spec.js    # Example test file
+│   ├── checkout.spec.js    # Example test file
+│   ├── grid.spec.js    
+│   ├── login.spec.js    
+│   ├── search.spec.js    
 ├── playwright.config.js   # Playwright configuration
 ├── package.json           # Project dependencies
 ├── README.md              # Project documentation

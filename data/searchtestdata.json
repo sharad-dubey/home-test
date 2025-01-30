@@ -1,5 +1,4 @@
 {
-    "searchurl":"http://localhost:3100/search",
     "searchtext":"Atomation",
     "emptysearchtext":"",
     "emptysearchresultmessage":"Please provide a search word.",

@@ -1,42 +1,35 @@
 import { test, expect } from '@playwright/test';
-import { SearchPage } from '../../pages/search'
-import { SearchPageEvent } from '../../pageEvents/SearchPageEvent'
-const testdata=JSON.parse(JSON.stringify(require("../../data/searchtestdata.json")))
-const testurl=JSON.parse(JSON.stringify(require("../../data/urldata.json")))
+import { SearchPage } from '../../pages/search';
+import { SearchPageEvent } from '../../pageEvents/SearchPageEvent';
+
+const testdata = require('../../data/searchtestdata.json');
+const testurl = require('../../data/environmentalConfig.json');
 
 test.beforeEach(async ({ page }) => {
     await page.goto(`${testurl.baseurl}/search`);
-  });
+});
 
-test('verify search result message', async ({ page }) => {
-
-    const Search = new SearchPage(page)
+test('Verify search result message', async ({ page }) => {
+    const search = new SearchPage(page);
     const searchWord = testdata.searchtext;
 
-    await Search.search_box.fill(searchWord);
-    await Search.search_button.click();
+    await search.search_box.fill(searchWord);
+    await search.search_button.click();
 
-    const searchResultMessage = await Search.search_result.textContent();
-    const partmessage = testdata.resultmessage;
-    const expectedResultMessage = partmessage + searchWord;
-    await expect(searchResultMessage).toBe(expectedResultMessage);  
+    const searchResultMessage = await search.search_result.textContent();
+    const expectedResultMessage = testdata.resultmessage + searchWord;
 
-}
-)
+    await expect(searchResultMessage).toBe(expectedResultMessage);
+});
 
-test('verify empty search result message', async ({ page }) => {
-
-    const Search = new SearchPage(page)
+test('Verify empty search result message', async ({ page }) => {
+    const search = new SearchPage(page);
     const searchWord = testdata.emptysearchtext;
 
-    await Search.search_box.fill(searchWord);
-    await Search.search_button.click();
+    await search.search_box.fill(searchWord);
+    await search.search_button.click();
 
-    const searchResultMessage = await Search.empty_search_result;
+    const searchResultMessage = await search.empty_search_result;
     await expect(searchResultMessage).toBeVisible();
-
-    const expectedResultMessage = testdata.emptysearchresultmessage;
-    await expect(searchResultMessage).toHaveText(expectedResultMessage);  
-
-}
-)
+    await expect(searchResultMessage).toHaveText(testdata.emptysearchresultmessage);
+});
